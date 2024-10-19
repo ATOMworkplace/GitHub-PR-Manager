@@ -10,7 +10,7 @@ function App() {
   const [token, setToken] = useState(process.env.REACT_APP_GITHUB_TOKEN);
   const [comment, setComment] = useState('');
   const [prFiles, setPrFiles] = useState([]);
-
+  const [darkMode, setDarkMode] = useState(false);
   async function getUserData() {
     try {
       const response = await fetch("http://localhost:4000/getUserData", {
@@ -77,7 +77,24 @@ function App() {
       alert(`Failed to fetch repository data: ${error.message}`);
     }
   }
+  useEffect(() => {
+    // Check if dark mode preference is stored in localStorage
+    const savedMode = localStorage.getItem('darkMode');
+    if (savedMode) {
+      setDarkMode(JSON.parse(savedMode));
+    }
+  }, []);
 
+  useEffect(() => {
+    // Apply dark mode class to body
+    document.body.classList.toggle('dark-mode', darkMode);
+    // Save dark mode preference to localStorage
+    localStorage.setItem('darkMode', JSON.stringify(darkMode));
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
   async function postComment(prNumber) {
     if (!comment) {
       alert('Please enter a comment before submitting.');
@@ -222,47 +239,62 @@ function loginWithGitHub() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <nav className="navbar">
+        <div className="navbar-brand">GitHub PR Manager</div>
+        <div className="navbar-user">
+        <button onClick={toggleDarkMode} className="mode-toggle">
+            {darkMode ? '☀️' : '🌙'}
+          </button>
+          {localStorage.getItem("accessToken") ? (
+            <>
+              <img 
+                src={userData.avatar_url || 'https://via.placeholder.com/40'} 
+                alt="User Avatar" 
+                className="avatar"
+              />
+              <button onClick={() => { localStorage.removeItem("accessToken"); setRerender(!rerender); }}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <button onClick={loginWithGitHub}>Login with GitHub</button>
+          )}
+        </div>
+      </nav>
+
+      <main className="main-content">
         {localStorage.getItem("accessToken") ? (
-          <>
-            <h1>GitHub PR Commenter</h1>
-            <button onClick={() => { localStorage.removeItem("accessToken"); setRerender(!rerender); }}>
-              LogOut
-            </button>
-            <button onClick={getUserData}>
-              Get User Data
-            </button>
-
-            {Object.keys(userData).length !== 0 && (
-              <>
-                <h2>{userData.login}</h2>
-                <img width="100px" height="100px" src={userData.avatar_url} alt="User Avatar" />
-
-                <input
-                  type="text"
-                  placeholder="Repo Name"
-                  value={repoName}
-                  onChange={(e) => setRepoName(e.target.value)}
-                />
-
-                <button onClick={getRepoInfo}>
-                  Get Repo Info
-                </button>
-                <br />
-                <button onClick={createAutoCommentFile}>
-                  Auto Comment
-                </button>
-                <h3>Pull Requests</h3>
+          <div className="dashboard">
+            <div className="profile-section">
+              {Object.keys(userData).length !== 0 && (
+                <>
+                  <img src={userData.avatar_url} alt="User Avatar" className="large-avatar" />
+                  <h2>{userData.login}</h2>
+                </>
+              )}
+              <button onClick={getUserData}>Get User Data</button>
+            </div>
+            <div className="repo-section">
+              <input
+                type="text"
+                placeholder="Repo Name"
+                value={repoName}
+                onChange={(e) => setRepoName(e.target.value)}
+              />
+              <button onClick={getRepoInfo}>Get Repo Info</button>
+              <button onClick={createAutoCommentFile}>Auto Comment</button>
+              
+              <h3>Pull Requests</h3>
+              <div className="pull-requests">
                 {pullRequests.length > 0 ? (
                   pullRequests.map((pr) => (
-                    <div key={pr.id}>
+                    <div key={pr.id} className="pr-card">
                       <h4>{pr.title}</h4>
                       <p><strong>Raised by:</strong> {pr.user?.login}</p>
                       <p><strong>Raised on:</strong> {new Date(pr.created_at).toLocaleDateString()}</p>
                       <p><strong>Message:</strong> {pr.body || 'No message'}</p>
-
-                      <button onClick={() => getPRFiles(pr.number)}>Get PR Files</button>
-                      <ul>
+                      <button onClick={() => getPRFiles(pr.number)} >Get PR Files</button>
+                      <ul className="pr-files">
                         {prFiles.map((file, index) => (
                           <li key={index}>
                             <p><strong>Filename:</strong> {file.filename}</p>
@@ -271,33 +303,31 @@ function loginWithGitHub() {
                           </li>
                         ))}
                       </ul>
-
-                      <a href={pr.html_url} target="_blank" rel="noopener noreferrer">View Pull Request</a>
-                      <br />
-                      <input
-                        type="text"
-                        placeholder="Type your comment here"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                      />
-                      <button onClick={() => postComment(pr.number)}>Comment</button>
+                      <a className="urlButton" href={pr.html_url} target="_blank" rel="noopener noreferrer">View Pull Request</a>
+                      <div className="comment-section">
+                        <input
+                          type="text"
+                          placeholder="Type your comment here"
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                        />
+                        <button onClick={() => postComment(pr.number)}>Comment</button>
+                      </div>
                     </div>
                   ))
                 ) : (
                   <p>No pull requests found</p>
                 )}
-              </>
-            )}
-          </>
+              </div>
+            </div>
+          </div>
         ) : (
-          <>
+          <div className="login-prompt">
             <h3>User is not logged in</h3>
-            <button onClick={loginWithGitHub}>
-              Login with GitHub
-            </button>
-          </>
+            <button onClick={loginWithGitHub}>Login with GitHub</button>
+          </div>
         )}
-      </header>
+      </main>
     </div>
   );
 }

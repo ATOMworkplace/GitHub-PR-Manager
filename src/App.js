@@ -299,7 +299,7 @@ function loginWithGitHub() {
                           <li key={index}>
                             <p><strong>Filename:</strong> {file.filename}</p>
                             <p><strong>Status:</strong> {file.status}</p>
-                            <p><strong>Changes:</strong> +{file.additions} -{file.deletions}</p>
+                            <p><strong>Changes:</strong> <span className="add">+ {file.additions} </span> <span className="sub"> - {file.deletions}</span></p>
                           </li>
                         ))}
                       </ul>

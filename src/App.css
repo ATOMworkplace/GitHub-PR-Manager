@@ -8,13 +8,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1rem;
   background-color: #24292e;
   color: white;
 }
 
 .navbar-brand {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
@@ -24,43 +24,53 @@
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
 }
 
 .main-content {
-  padding: 2rem;
+  padding: 1rem;
+  margin: 5px;
 }
 
 .dashboard {
   display: flex;
-  justify-content: center;
-  gap: 2rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-around;
 }
 
 .profile-section {
-  flex: 0 0 auto;
+  width: 100%;
+  max-width: 300px;
   text-align: center;
 }
 
 .large-avatar {
-  width: 500px;
-  height: 500px;
+  width: 100%;
+  margin-top: 10%;
+  height: auto;
+  max-width: 300px;
   border-radius: 50%;
   margin-bottom: 1rem;
+  box-shadow: 5px 5px 10px #666666;
 }
 
 .repo-section {
-  flex: 1 1 auto;
+  width: 100%;
   max-width: 800px;
 }
 
 input[type="text"], button {
+  
   margin: 0.5rem;
   padding: 0.5rem 1rem;
   font-size: 1rem;
+  border: solid 1px rgb(214, 214, 214);
+  border-radius: 20px;
 }
 
 button {
@@ -69,6 +79,7 @@ button {
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
+  border-radius: 10px;
 }
 
 button:hover {
@@ -76,11 +87,19 @@ button:hover {
 }
 
 .mode-toggle {
-  background: none;
-  border: none;
   font-size: 1.5rem;
-  cursor: pointer;
-  margin-right: 1rem;
+  border-radius: 50px;
+  padding:  0px 0px 5px;
+  margin: 0;
+  margin-right: 10px;
+  width: 60px;
+  text-align: right;
+  background: rgb(77, 77, 77);
+  height: 2rem;
+  align-items: center;
+}
+.mode-toggle:hover{
+  background: rgb(77, 77, 77);
 }
 
 .pull-requests {
@@ -89,13 +108,23 @@ button:hover {
   gap: 1rem;
   margin-top: 1rem;
 }
-
+.add{
+  color: rgb(2, 180, 2);
+  font-weight: bolder;
+}
+.sub{
+  color: red;
+  font-weight: bolder;
+}
 .pr-card {
   border: 1px solid #e1e4e8;
   border-radius: 6px;
   padding: 1rem;
   text-align: left;
   transition: background-color 0.3s, color 0.3s;
+  border: solid 1px black;
+  border-radius: 20px;
+  
 }
 
 .pr-files {
@@ -118,6 +147,7 @@ button:hover {
   justify-content: center;
   height: 50vh;
 }
+
 .urlButton {
   text-decoration: none;
   color: #000000;
@@ -125,31 +155,43 @@ button:hover {
   padding: 0.5rem 1rem;
   border-radius: 6px;
   transition: background-color 0.3s, color 0.3s;
+  display: inline-block;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  
 }
 
 .urlButton:hover {
   background-color: #d1d5da;
 }
+
 /* Dark mode styles */
 .dark-mode {
   background-color: #1a1a1a;
   color: #ffffff;
 }
-.dark-mode {
-  background-color: #1a1a1a;
-  color: #ffffff;
-}
+
 .dark-mode .navbar {
   background-color: #2d333b;
 }
-.dark-mode .urlButton {
-  color: #ffffff;
-  background-color: #434c57;
+.dark-mode .large-avatar {
+  box-shadow: 10px 10px 15px black;
+}
+.dark-mode .mode-toggle:hover{
+  background: rgb(77, 77, 77);
+}
+.dark-mode .mode-toggle{
+  border-radius: 50px;
+  padding: 0;
+  margin: 0;
+  margin-right: 10px;
+  width: 60px;
+  text-align: left;
+  background: rgb(77, 77, 77);
+  height: 2rem;
+  align-items: center;
 }
 
-.dark-mode .urlButton:hover {
-  background-color: #444c56;
-}
 .dark-mode button {
   background-color: #238636;
 }
@@ -167,4 +209,58 @@ button:hover {
   background-color: #3a3a3a;
   color: #ffffff;
   border: 1px solid #444c56;
+}
+
+.dark-mode .urlButton {
+  color: #ffffff;
+  background-color: #313335;
+}
+
+.dark-mode .urlButton:hover {
+  background-color: #444c56;
+}
+
+/* Responsive design */
+@media (min-width: 768px) {
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .main-content {
+    padding: 2rem;
+  }
+
+  .dashboard {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .profile-section {
+    max-width: 500px;
+  }
+
+  .large-avatar {
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-brand {
+    margin-bottom: 0.5rem;
+  }
+
+  input[type="text"], button {
+    
+    margin: 0.5rem 0;
+  }
 }

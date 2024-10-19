@@ -48,10 +48,3 @@ Our auto-comment system takes PR management to the next level:
 5. **Maintainer interface**: Access a user-friendly dashboard to review, manage, and take action on PRs efficiently.
 
 ---
-
-## Key Features
-
-- **Machine learning-powered analysis**: Our AI model learns from your project's history to provide increasingly accurate insights.
-- **Customizable workflows**: Create custom actions and integrations to fit your unique development process.
-- **Contributor engagement**: Automatically thank and engage first-time contributors, fostering a welcoming community.
-- **Analytics and reporting**: Gain insights into your PR trends, contributor demographics, and process efficiency.
